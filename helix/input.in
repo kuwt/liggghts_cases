@@ -1,0 +1,168 @@
+#################################### Header for General commands ####################################
+
+atom_style granular #Simulation of particles
+
+boundary f f p #fixed boundaries -> particles will be deleted if leaving the simulation box, periodic boundaries on Z
+
+units si #all units are in Si
+
+communicate single vel yes #default
+
+newton off #default
+
+#################################### System variables ####################################
+
+#Definition of boundaries
+variable xmin equal -0.0097444
+variable xmax equal 0.0097444
+variable ymin equal -0.0097444
+variable ymax equal 0.0097444
+variable zmin equal -2e-15
+variable zmax equal 0.96
+
+#Definition of the timestep
+variable dt equal 4e-07
+variable calculationtime equal 10
+variable	allsteps equal 25000000 #Transform time to iteration steps ${calculationtime}/${dt}
+#################################### Specific variables for current simulation ####################################
+
+variable nparticletype equal 4 #1 -> Pipe, #2 -> Helix, #3..#n ->Particles
+#variables for material properties
+#Elastic constants kn, kt, Use_gamman=gamman*Meff*sqrt(Reff), Use_gammat=gammat*Meff*sqrt(Reff)
+variable kn11 equal 7.0741e+07 #N/m
+variable kt11 equal 9.1642e+07 #N/m
+variable gamman11 equal 1.6181e+08 #N*s/(kg*m)
+variable gammat11 equal 1.6181e+08 #N*s/(kg*m)
+variable kn12 equal 7.0741e+07 #N/m
+variable kt12 equal 9.1642e+07 #N/m
+variable gamman12 equal 9.4781e+09 #N*s/(kg*m)
+variable gammat12 equal 9.4781e+09 #N*s/(kg*m)
+variable kn13 equal 7.0741e+07 #N/m
+variable kt13 equal 9.1642e+07 #N/m
+variable gamman13 equal 9.2936e+07 #N*s/(kg*m)
+variable gammat13 equal 9.2936e+07 #N*s/(kg*m)
+variable kn14 equal 7.0741e+07 #N/m
+variable kt14 equal 9.1642e+07 #N/m
+variable gamman14 equal 3.7174e+08 #N*s/(kg*m)
+variable gammat14 equal 3.7174e+08 #N*s/(kg*m)
+variable kn21 equal 7.0741e+07 #N/m
+variable kt21 equal 9.1642e+07 #N/m
+variable gamman21 equal 9.4781e+09 #N*s/(kg*m)
+variable gammat21 equal 9.4781e+09 #N*s/(kg*m)
+variable kn22 equal 7.0741e+07 #N/m
+variable kt22 equal 9.1642e+07 #N/m
+variable gamman22 equal 1.6181e+10 #N*s/(kg*m)
+variable gammat22 equal 1.6181e+10 #N*s/(kg*m)
+variable kn23 equal 7.0741e+07 #N/m
+variable kt23 equal 9.1642e+07 #N/m
+variable gamman23 equal 1.5013e+08 #N*s/(kg*m)
+variable gammat23 equal 1.5013e+08 #N*s/(kg*m)
+variable kn24 equal 7.0741e+07 #N/m
+variable kt24 equal 9.1642e+07 #N/m
+variable gamman24 equal 5.3195e+08 #N*s/(kg*m)
+variable gammat24 equal 5.3195e+08 #N*s/(kg*m)
+variable kn31 equal 7.0741e+07 #N/m
+variable kt31 equal 9.1642e+07 #N/m
+variable gamman31 equal 9.2936e+07 #N*s/(kg*m)
+variable gammat31 equal 9.2936e+07 #N*s/(kg*m)
+variable kn32 equal 7.0741e+07 #N/m
+variable kt32 equal 9.1642e+07 #N/m
+variable gamman32 equal 1.5013e+08 #N*s/(kg*m)
+variable gammat32 equal 1.5013e+08 #N*s/(kg*m)
+variable kn33 equal 7.0741e+07 #N/m
+variable kt33 equal 9.1642e+07 #N/m
+variable gamman33 equal 1.6181e+08 #N*s/(kg*m)
+variable gammat33 equal 1.6181e+08 #N*s/(kg*m)
+variable kn34 equal 7.0741e+07 #N/m
+variable kt34 equal 9.1642e+07 #N/m
+variable gamman34 equal 4.3267e+08 #N*s/(kg*m)
+variable gammat34 equal 4.3267e+08 #N*s/(kg*m)
+variable kn41 equal 7.0741e+07 #N/m
+variable kt41 equal 9.1642e+07 #N/m
+variable gamman41 equal 3.7174e+08 #N*s/(kg*m)
+variable gammat41 equal 3.7174e+08 #N*s/(kg*m)
+variable kn42 equal 7.0741e+07 #N/m
+variable kt42 equal 9.1642e+07 #N/m
+variable gamman42 equal 5.3195e+08 #N*s/(kg*m)
+variable gammat42 equal 5.3195e+08 #N*s/(kg*m)
+variable kn43 equal 7.0741e+07 #N/m
+variable kt43 equal 9.1642e+07 #N/m
+variable gamman43 equal 4.3267e+08 #N*s/(kg*m)
+variable gammat43 equal 4.3267e+08 #N*s/(kg*m)
+variable kn44 equal 7.0741e+07 #N/m
+variable kt44 equal 9.1642e+07 #N/m
+variable gamman44 equal 6.4724e+08 #N*s/(kg*m)
+variable gammat44 equal 6.4724e+08 #N*s/(kg*m)
+#Sliding friction coefficient
+variable sfc11 equal 0.5
+variable sfc12 equal 0.5
+variable sfc13 equal 0.5
+variable sfc14 equal 0.5
+variable sfc21 equal 0.5
+variable sfc22 equal 0.5
+variable sfc23 equal 0.5
+variable sfc24 equal 0.5
+variable sfc31 equal 0.5
+variable sfc32 equal 0.5
+variable sfc33 equal 0.5
+variable sfc34 equal 0.5
+variable sfc41 equal 0.5
+variable sfc42 equal 0.5
+variable sfc43 equal 0.5
+variable sfc44 equal 0.5
+#variable for particle
+variable particleradii333 equal 0.0012
+variable particlefraction333 equal 0.5
+variable particledensity33 equal 2650
+
+variable particleradii444 equal 0.0006
+variable particlefraction444 equal 0.5
+variable particledensity44 equal 2650
+
+#################################### Definition of simulationbox ####################################
+
+read_data ParticleHelix.dat
+region reg cylinder z 0.0 0.0 0.0096004 0 0.96 units box
+neighbor	0.00024 bin #default
+neigh_modify	delay 0 #default
+#################################### Definition of the contact models ####################################
+
+pair_style gran model hertz/stiffness tangential history limitForce on tangential_damping on #contact model
+pair_coeff * * #default
+timestep ${dt}
+fix integrator all nve/sphere #default
+fix gravi all gravity 9.81 vector 0.0 0.0 -1.0 #default
+#################################### Definition of Material properties ####################################
+
+fix m1 all property/global kn peratomtypepair ${nparticletype} ${kn11} ${kn12} ${kn13} ${kn14} ${kn21} ${kn22} ${kn23} ${kn24} ${kn31} ${kn32} ${kn33} ${kn34} ${kn41} ${kn42} ${kn43} ${kn44}
+fix m2 all property/global kt peratomtypepair ${nparticletype} ${kt11} ${kt12} ${kt13} ${kt14} ${kt21} ${kt22} ${kt23} ${kt24} ${kt31} ${kt32} ${kt33} ${kt34} ${kt41} ${kt42} ${kt43} ${kt44}
+fix m3 all property/global gamman peratomtypepair ${nparticletype} ${gamman11} ${gamman12} ${gamman13} ${gamman14} ${gamman21} ${gamman22} ${gamman23} ${gamman24} ${gamman31} ${gamman32} ${gamman33} ${gamman34} ${gamman41} ${gamman42} ${gamman43} ${gamman44}
+fix m4 all property/global gammat peratomtypepair ${nparticletype} ${gammat11} ${gammat12} ${gammat13} ${gammat14} ${gammat21} ${gammat22} ${gammat23} ${gammat24} ${gammat31} ${gammat32} ${gammat33} ${gammat34} ${gammat41} ${gammat42} ${gammat43} ${gammat44}
+fix m5 all property/global coefficientFriction peratomtypepair ${nparticletype} ${sfc11} ${sfc12} ${sfc13} ${sfc14} ${sfc21} ${sfc22} ${sfc23} ${sfc24} ${sfc31} ${sfc32} ${sfc33} ${sfc34} ${sfc41} ${sfc42} ${sfc43} ${sfc44}
+#################################### Generation of the Geometry ####################################
+
+fix cylwall all wall/gran model hertz/stiffness tangential history primitive type 1 zcylinder 0.0096004 0.0 0.0
+#################################### Generation and Insertion of the particles ####################################
+
+fix pts333 all particletemplate/sphere 10093 atom_type 3 density constant ${particledensity33} radius constant ${particleradii333}
+fix pts444 all particletemplate/sphere 12289 atom_type 4 density constant ${particledensity44} radius constant ${particleradii444}
+fix pdd1 all particledistribution/discrete/massbased 32452867 2 pts333 ${particlefraction333} pts444 ${particlefraction444}
+
+fix ins all insert/rate/region seed 86028157 distributiontemplate pdd1 maxattempt 15000 nparticles 22464 particlerate 2246400 insert_every 10 &
+overlapcheck no all_in yes vel uniform 0.0 0.0 -3.0 0.2 0.2 0.2 region reg
+
+####################################Should Add Particles 22464####################################
+group helix1 id 1:5856
+fix frz1 helix1 freeze
+
+#################################### Dumping of the data for post-processing to visualize ####################################
+
+shell mkdir post
+variable dumptime equal 0.02 # Every 0.02s 1 image
+variable dumpstep equal ${dumptime}/${dt} #Transform to iteration steps
+dump dmp all custom/vtk 50000 post/particles_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius density #${dumpstep}
+#################################### RUN the simulation filling and rotation ####################################
+
+run 250000
+unfix ins
+run ${allsteps}

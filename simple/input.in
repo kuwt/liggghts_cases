@@ -1,0 +1,132 @@
+#################################### Header for General commands ####################################
+atom_style granular #Simulation of particles
+
+boundary f f p #fixed boundaries -> particles will be deleted if leaving the simulation box, periodic boundaries on Z
+
+units si #all units are in Si
+
+communicate single vel yes #default
+
+newton off #default
+
+#################################### System variables ####################################
+#Definition of boundaries
+variable xmin equal -0.002352
+variable xmax equal 0.002352
+variable ymin equal -0.002352
+variable ymax equal 0.002352
+variable zmin equal 0
+variable zmax equal 1
+
+#Definition of the timestep
+variable dt equal 2e-07
+variable calculationtime equal 4
+variable	allsteps equal 20000000 #Transform time to iteration steps ${calculationtime}/${dt}
+
+
+#################################### Specific variables for current simulation ####################################
+variable nparticletype equal 3 #1 -> Pipe, #2 -> Helix, #3..#n ->Particles
+#variables for material properties
+#Elastic constants kn, kt, Use_gamman=gamman*Meff*sqrt(Reff), Use_gammat=gammat*Meff*sqrt(Reff)
+variable kn11 equal 7.0741e+07 #N/m
+variable kt11 equal 9.1642e+07 #N/m
+variable gamman11 equal 3.7174e+08 #N*s/(kg*m)
+variable gammat11 equal 3.7174e+08 #N*s/(kg*m)
+variable kn12 equal 7.0741e+07 #N/m
+variable kt12 equal 9.1642e+07 #N/m
+variable gamman12 equal 3.0346e+09 #N*s/(kg*m)
+variable gammat12 equal 3.0346e+09 #N*s/(kg*m)
+variable kn13 equal 7.0741e+07 #N/m
+variable kt13 equal 9.1642e+07 #N/m
+variable gamman13 equal 3.7174e+08 #N*s/(kg*m)
+variable gammat13 equal 3.7174e+08 #N*s/(kg*m)
+variable kn21 equal 7.0741e+07 #N/m
+variable kt21 equal 9.1642e+07 #N/m
+variable gamman21 equal 3.0346e+09 #N*s/(kg*m)
+variable gammat21 equal 3.0346e+09 #N*s/(kg*m)
+variable kn22 equal 7.0741e+07 #N/m
+variable kt22 equal 9.1642e+07 #N/m
+variable gamman22 equal 5.2836e+09 #N*s/(kg*m)
+variable gammat22 equal 5.2836e+09 #N*s/(kg*m)
+variable kn23 equal 7.0741e+07 #N/m
+variable kt23 equal 9.1642e+07 #N/m
+variable gamman23 equal 3.3045e+09 #N*s/(kg*m)
+variable gammat23 equal 3.3045e+09 #N*s/(kg*m)
+variable kn31 equal 7.0741e+07 #N/m
+variable kt31 equal 9.1642e+07 #N/m
+variable gamman31 equal 3.7174e+08 #N*s/(kg*m)
+variable gammat31 equal 3.7174e+08 #N*s/(kg*m)
+variable kn32 equal 7.0741e+07 #N/m
+variable kt32 equal 9.1642e+07 #N/m
+variable gamman32 equal 3.3045e+09 #N*s/(kg*m)
+variable gammat32 equal 3.3045e+09 #N*s/(kg*m)
+variable kn33 equal 7.0741e+07 #N/m
+variable kt33 equal 9.1642e+07 #N/m
+variable gamman33 equal 6.4724e+08 #N*s/(kg*m)
+variable gammat33 equal 6.4724e+08 #N*s/(kg*m)
+#Sliding friction coefficient
+variable sfc11 equal 0.5
+variable sfc12 equal 0.5
+variable sfc13 equal 0.5
+variable sfc21 equal 0.5
+variable sfc22 equal 0.5
+variable sfc23 equal 0.5
+variable sfc31 equal 0.5
+variable sfc32 equal 0.5
+variable sfc33 equal 0.5
+#variable for particle
+variable particleradii333 equal 0.0006
+variable particlefraction333 equal 1
+variable particledensity33 equal 2650
+
+#################################### Definition of simulationbox ####################################
+region simulationdomain block ${xmin} ${xmax} ${ymin} ${ymax} ${zmin} ${zmax} units box
+create_box 3 simulationdomain
+region reg cylinder z 0.0 0.0 0.0021 0 1 units box
+neighbor	0.00012 bin #default
+neigh_modify	delay 0 #default
+
+
+#################################### Definition of the contact models ####################################
+pair_style gran model hertz/stiffness tangential history limitForce on tangential_damping on #contact model
+pair_coeff * * #default
+timestep ${dt}
+fix integrator all nve/sphere #default
+fix gravi all gravity 9.81 vector 0.0 0.0 -1.0 #default
+
+
+#################################### Definition of Material properties ####################################
+fix m1 all property/global kn peratomtypepair ${nparticletype} ${kn11} ${kn12} ${kn13} ${kn21} ${kn22} ${kn23} ${kn31} ${kn32} ${kn33}
+fix m2 all property/global kt peratomtypepair ${nparticletype} ${kt11} ${kt12} ${kt13} ${kt21} ${kt22} ${kt23} ${kt31} ${kt32} ${kt33}
+fix m3 all property/global gamman peratomtypepair ${nparticletype} ${gamman11} ${gamman12} ${gamman13} ${gamman21} ${gamman22} ${gamman23} ${gamman31} ${gamman32} ${gamman33}
+fix m4 all property/global gammat peratomtypepair ${nparticletype} ${gammat11} ${gammat12} ${gammat13} ${gammat21} ${gammat22} ${gammat23} ${gammat31} ${gammat32} ${gammat33}
+fix m5 all property/global coefficientFriction peratomtypepair ${nparticletype} ${sfc11} ${sfc12} ${sfc13} ${sfc21} ${sfc22} ${sfc23} ${sfc31} ${sfc32} ${sfc33}
+
+
+#################################### Generation of the Geometry ####################################
+fix cylwall all wall/gran model hertz/stiffness tangential history primitive type 1 zcylinder 0.0021 0.0 0.0
+
+
+#################################### Generation and Insertion of the particles ####################################
+fix pts333 all particletemplate/sphere 10093 atom_type 3 density constant ${particledensity33} radius constant ${particleradii333}
+fix pdd1 all particledistribution/discrete/massbased 32452867 1 pts333 ${particlefraction333}
+
+fix ins all insert/rate/region seed 86028157 distributiontemplate pdd1 maxattempt 15000 nparticles 2679 particlerate 267900 insert_every 10 &
+overlapcheck no all_in yes vel uniform 0.0 0.0 -1.0 0.1 0.1 0.0 region reg
+
+
+####################################Should Add Particles 2679####################################
+
+
+
+#################################### Dumping of the data for post-processing to visualize ####################################
+shell mkdir post
+variable dumptime equal 0.005 # Every 0.005s 1 image
+variable dumpstep equal ${dumptime}/${dt} #Transform to iteration steps
+dump dmp all custom/vtk 25000 post/particles_*.vtk id type type x y z ix iy iz vx vy vz fx fy fz omegax omegay omegaz radius density #${dumpstep}
+
+
+#################################### RUN the simulation filling and rotation ####################################
+run 500000
+unfix ins
+run ${allsteps}
